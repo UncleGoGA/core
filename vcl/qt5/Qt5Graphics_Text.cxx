@@ -23,8 +23,10 @@
 #include <Qt5Painter.hxx>
 
 #include <vcl/fontcharmap.hxx>
+#ifndef _WIN32
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
+#endif
 
 #include <sallayout.hxx>
 #include <PhysicalFontCollection.hxx>
@@ -88,7 +90,9 @@ bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
 
 void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 {
+#ifndef _WIN32
     static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
+#endif
 
     m_pFontCollection = pPFC;
     if (pPFC->Count())
@@ -96,6 +100,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
     QFontDatabase aFDB;
 
+#ifndef _WIN32
     if (bUseFontconfig)
     {
         ::std::vector<psp::fontID> aList;
@@ -114,6 +119,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
         SalGenericInstance::RegisterFontSubstitutors(pPFC);
     }
+#endif
 
     for (auto& family : aFDB.families())
         for (auto& style : aFDB.styles(family))

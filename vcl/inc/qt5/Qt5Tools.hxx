@@ -82,7 +82,9 @@ inline QImage::Format getBitFormat(sal_uInt16 nBitCount)
             std::abort();
             break;
     }
+#ifndef _WIN32
     return QImage::Format_Invalid;
+#endif
 }
 
 inline sal_uInt16 getFormatBits(QImage::Format eFormat)
@@ -102,10 +104,13 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
             return 32;
         default:
             std::abort();
+#ifndef _WIN32
             return 0;
+#endif
     }
 }
 
+#ifndef _WIN32
 typedef struct _cairo_surface cairo_surface_t;
 struct CairoDeleter
 {
@@ -113,6 +118,7 @@ struct CairoDeleter
 };
 
 typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
+#endif
 
 sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers);
 sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);

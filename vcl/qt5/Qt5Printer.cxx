@@ -17,10 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svsys.h>
+#include <salptype.hxx>
+
+#include <tools/gen.hxx>
 #include <Qt5Printer.hxx>
 
-Qt5Printer::Qt5Printer(SalInfoPrinter* pInfoPrinter)
+Qt5Printer::Qt5Printer(SalInfoPrinter* /* pInfoPrinter */)
+#ifndef _WIN32
     : PspSalPrinter(pInfoPrinter)
+#else
+    : WinSalPrinter()
+#endif
 {
 }
 
