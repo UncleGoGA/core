@@ -45,7 +45,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/syswin.hxx>
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 #endif
@@ -60,7 +60,7 @@ static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExten
 Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo )
     : m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     , m_pSvpGraphics(nullptr)
 #endif
     , m_bNullRegion(true)
@@ -167,7 +167,7 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
 {
     int width = 640;
@@ -188,7 +188,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     m_bGraphicsInUse = true;
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     if (m_bUseCairo)
     {
         if (!m_pOurSvpGraphics.get())
@@ -215,7 +215,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 void Qt5Frame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     if (m_bUseCairo)
         assert(pSalGraph == m_pOurSvpGraphics.get());
     else

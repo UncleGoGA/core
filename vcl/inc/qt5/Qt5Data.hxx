@@ -30,10 +30,10 @@ class GlyphCache;
 class QCursor;
 
 class VCLPLUG_QT5_PUBLIC Qt5Data
-#ifndef _WIN32
-    : public GenericUnixSalData
-#else
+#if (defined MACOSX || defined _WIN32)
     : public SalData
+#else
+    : public GenericUnixSalData
 #endif
 {
     o3tl::enumarray<PointerStyle, std::unique_ptr<QCursor>> m_aCursors;
@@ -41,7 +41,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Data
 public:
     explicit Qt5Data(SalInstance* pInstance);
     virtual ~Qt5Data() override;
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     virtual void ErrorTrapPush() override;
     virtual bool ErrorTrapPop(bool bIgnoreError = true) override;
 #endif
